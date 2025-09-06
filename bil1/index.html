@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การเงินส่วนบุคคล</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-wallet"></i> การเงินส่วนบุคคล</h1>
+            <div class="period-selector">
+                <button class="period-btn active" data-period="month" onclick="showPeriodSelector('month')">ประจำเดือน</button>
+                <button class="period-btn" data-period="year" onclick="showPeriodSelector('year')">ปี</button>
+            </div>
+            <div class="date-selector" id="dateSelector" style="display: none;">
+                <select id="monthSelect" style="display: none;">
+                    <option value="0">มกราคม</option>
+                    <option value="1">กุมภาพันธ์</option>
+                    <option value="2">มีนาคม</option>
+                    <option value="3">เมษายน</option>
+                    <option value="4">พฤษภาคม</option>
+                    <option value="5">มิถุนายน</option>
+                    <option value="6">กรกฎาคม</option>
+                    <option value="7">สิงหาคม</option>
+                    <option value="8">กันยายน</option>
+                    <option value="9">ตุลาคม</option>
+                    <option value="10">พฤศจิกายน</option>
+                    <option value="11">ธันวาคม</option>
+                </select>
+                <select id="yearSelect">
+                    <!-- Years will be populated by JavaScript -->
+                </select>
+            </div>
+        </header>
+
+        <!-- Summary Section -->
+        <section class="summary">
+            <div class="summary-card income">
+                <div class="summary-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>รายรับ</h3>
+                    <span class="amount" id="totalIncome">0.00</span>
+                </div>
+            </div>
+            <div class="summary-card expense">
+                <div class="summary-icon">
+                    <i class="fas fa-minus-circle"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>รายจ่าย</h3>
+                    <span class="amount" id="totalExpense">0.00</span>
+                </div>
+            </div>
+            <div class="summary-card balance">
+                <div class="summary-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>คงเหลือ</h3>
+                    <span class="amount" id="balance">0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="action-buttons">
+            <button class="action-btn income-btn" onclick="showIncomeMenu()">
+                <i class="fas fa-plus"></i> เพิ่มรายรับ
+            </button>
+            <button class="action-btn expense-btn" onclick="showExpenseMenu()">
+                <i class="fas fa-minus"></i> เพิ่มรายจ่าย
+            </button>
+        </section>
+
+        <!-- Income Menu Modal -->
+        <div id="incomeModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-plus-circle"></i> เมนูรายรับ</h3>
+                    <span class="close" onclick="closeModal('incomeModal')">&times;</span>
+                </div>
+                <div class="menu-items">
+                    <button class="menu-item" onclick="addTransaction('income', 'เงินเดือน', 'salary')">
+                        <i class="fas fa-money-bill-wave"></i> เงินเดือน
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('income', 'รายรับอื่น', 'other')">
+                        <i class="fas fa-coins"></i> รายรับอื่น
+                    </button>
+                    <button class="menu-item total-btn" onclick="showIncomeTotal()">
+                        <i class="fas fa-calculator"></i> รวมรายรับ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expense Menu Modal -->
+        <div id="expenseModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-minus-circle"></i> เมนูรายจ่าย</h3>
+                    <span class="close" onclick="closeModal('expenseModal')">&times;</span>
+                </div>
+                <div class="menu-items">
+                    <button class="menu-item" onclick="addTransaction('expense', 'ค่าน้ำ', 'water')">
+                        <i class="fas fa-tint"></i> จ่ายค่าน้ำ
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'ค่าไฟ', 'electricity')">
+                        <i class="fas fa-bolt"></i> จ่ายค่าไฟ
+                    </button>
+                    <button class="menu-item" onclick="showCreditCardMenu()">
+                        <i class="fas fa-credit-card"></i> ค่าบัตรเครดิต
+                    </button>
+                    <button class="menu-item" onclick="showShopeeMenu()">
+                        <i class="fab fa-shopify" style="color: #ee4d2d;"></i> Shopee
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'ค่าเรียนหลาน', 'education')">
+                        <i class="fas fa-graduation-cap"></i> จ่ายค่าเรียนหลาน
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'จ่ายให้แม่', 'family')">
+                        <i class="fas fa-heart"></i> จ่ายให้แม่
+                    </button>
+                    <button class="menu-item total-btn" onclick="showExpenseTotal()">
+                        <i class="fas fa-calculator"></i> รวมรายจ่าย
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Credit Card Submenu Modal -->
+        <div id="creditCardModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-credit-card"></i> บัตรเครดิต</h3>
+                    <span class="close" onclick="closeModal('creditCardModal')">&times;</span>
+                </div>
+                <div class="menu-items">
+                    <button class="menu-item bbl-card" onclick="addTransaction('expense', 'ธนาคารกรุงเทพฯ', 'bbl')">
+                        <i class="fas fa-university" style="color: #1e3a8a;"></i> ธนาคารกรุงเทพฯ
+                    </button>
+                    <button class="menu-item kasikorn-card" onclick="addTransaction('expense', 'กสิกร Visa Shopee', 'kasikorn-shopee')">
+                        <i class="fab fa-cc-visa" style="color: #4ade80;"></i> กสิกร Visa Shopee
+                    </button>
+                    <button class="menu-item kasikorn-card" onclick="addTransaction('expense', 'กสิกร Visa Platinum', 'kasikorn-platinum')">
+                        <i class="fab fa-cc-visa" style="color: #4ade80;"></i> กสิกร Visa Platinum
+                    </button>
+                    <button class="menu-item kasikorn-card" onclick="addTransaction('expense', 'กสิกร Mastercard', 'kasikorn-master')">
+                        <i class="fab fa-cc-mastercard" style="color: #4ade80;"></i> กสิกร Mastercard
+                    </button>
+                    <button class="menu-item ktb-card" onclick="addTransaction('expense', 'กรุงไทย', 'ktb')">
+                        <i class="fas fa-university" style="color: #3b82f6;"></i> กรุงไทย
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'FirstChoice', 'firstchoice')">
+                        <i class="fas fa-credit-card" style="color: #f59e0b;"></i> FirstChoice
+                    </button>
+                    <button class="menu-item central-card" onclick="addTransaction('expense', 'CentralCard', 'central')">
+                        <i class="fas fa-credit-card" style="color: #dc2626;"></i> CentralCard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shopee Submenu Modal -->
+        <div id="shopeeModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fab fa-shopify" style="color: #ee4d2d;"></i> Shopee</h3>
+                    <span class="close" onclick="closeModal('shopeeModal')">&times;</span>
+                </div>
+                <div class="menu-items">
+                    <button class="menu-item" onclick="addTransaction('expense', 'sPayLater Utx9919', 'spaylater-utx9919')">
+                        <i class="fas fa-mobile-alt" style="color: #ee4d2d;"></i> sPayLater Utx9919
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'EasyCash Utx9919', 'easycash-utx9919')">
+                        <i class="fas fa-mobile-alt" style="color: #ee4d2d;"></i> EasyCash Utx9919
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'sPayLater Note3216', 'spaylater-note3216')">
+                        <i class="fas fa-mobile-alt" style="color: #ee4d2d;"></i> sPayLater Note3216
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'EasyCash Note32016', 'easycash-note32016')">
+                        <i class="fas fa-mobile-alt" style="color: #ee4d2d;"></i> EasyCash Note32016
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'Shopee LimitLater Note', 'shopee-limitlater')">
+                        <i class="fas fa-mobile-alt" style="color: #ee4d2d;"></i> Shopee LimitLater Note
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'Lazada Laz7557', 'lazada-laz7557')">
+                        <i class="fas fa-shopping-cart" style="color: #f97316;"></i> Lazada Laz7557
+                    </button>
+                    <button class="menu-item" onclick="addTransaction('expense', 'Line BK', 'line-bk')">
+                        <i class="fab fa-line" style="color: #10b981;"></i> Line BK
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Input Modal -->
+        <div id="transactionModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="transactionTitle">เพิ่มรายการ</h3>
+                    <span class="close" onclick="closeModal('transactionModal')">&times;</span>
+                </div>
+                <div class="transaction-form">
+                    <div class="form-group">
+                        <label>ประเภท:</label>
+                        <span id="transactionType"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">จำนวนเงิน:</label>
+                        <input type="number" id="amount" placeholder="0.00" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">รายละเอียด:</label>
+                        <input type="text" id="description" placeholder="รายละเอียดเพิ่มเติม (ไม่บังคับ)">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">วันที่:</label>
+                        <input type="date" id="date">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-cancel" onclick="closeModal('transactionModal')">ยกเลิก</button>
+                        <button class="btn-save" onclick="saveTransaction()">บันทึก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction History -->
+        <section class="transaction-history">
+            <div class="history-header">
+                <h3><i class="fas fa-history"></i> รายการล่าสุด</h3>
+                <button class="clear-btn" onclick="clearAllData()">
+                    <i class="fas fa-trash"></i> ล้างข้อมูล
+                </button>
+            </div>
+            <div id="transactionList" class="transaction-list">
+                <!-- Transaction items will be added here -->
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
